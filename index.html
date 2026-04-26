@@ -300,22 +300,12 @@ async function submitTip() {
   submitBtn.disabled = true;
   status.className = ''; status.textContent = '';
 
-  const now = new Date().toLocaleString('da-DK', { timeZone: 'Europe/Copenhagen' });
-
   try {
-    const res = await fetch('https://box365-api.johnsimonsen1.workers.dev', {
+    await fetch('https://script.google.com/macros/s/AKfycbxuEi4hMPwjw7uuIU9j0l654Ol1NcJSXjZXxxwdg5xAaBSecNnApWZ9-HNWmVxbFww/exec', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 200,
-        messages: [{
-          role: 'user',
-          content: `Gem denne feedback i Google Sheet med id="${SHEET_ID}": Dato: ${now}, Navn: ${name || 'Anonym'}, Kategori: ${category}, Besked: ${text}. Svar kun "OK".`
-        }]
-      })
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ navn: name || 'Anonym', kategori: category, besked: text })
     });
 
     status.className = 'ok';
