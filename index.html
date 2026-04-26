@@ -187,11 +187,6 @@
 <script>
 // ── Konfiguration ──────────────────────────────────────────────
 const SHEET_ID   = '1PiF8mUTej9zJAaMfo3abqrnovIVvVJuBsZ8rrAfoS5g';
-const DRIVE_FILES = [
-  { label: "Ledelsesoversigt", id: "1z6ilCor4guCPTcZSxJqbY1f7oJONvhMzJ1rbLd7FS0Y" },
-  { label: "Kontaktliste",     id: "1H8KTYTygBGJg3YCtn7K48VJa8Wt6IrKluzLXsVlcqA4" }
-];
-
 const BASE_SYSTEM = `Du er Box365's interne AI-assistent til COACHES.
 Box365 er et CrossFit & HYROX Affiliate med afdelinger i Esbjerg og Horsens.
 Svar altid på dansk. Vær direkte og praktisk. Brug bullet points ved lister.
@@ -268,35 +263,6 @@ Bekræft kort når det er gemt.`
     console.error(err);
   }
   submitBtn.disabled = false;
-}
-
-// ── DRIVE INDHOLD ─────────────────────────────────────────────
-async function loadDriveContent() {
-  try {
-    const filePrompts = DRIVE_FILES.map(f =>
-      `Læs Google Drive fil med id="${f.id}" (${f.label}) og returner indholdet som ren tekst.`
-    ).join('\n');
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        mcp_servers: [{ type: 'url', url: 'https://drivemcp.googleapis.com/mcp/v1', name: 'google-drive' }],
-        messages: [{ role: 'user', content: `${filePrompts}\n\nReturnér det samlede indhold fra begge filer som én tekstblok. Kun indholdet, ingen kommentarer.` }]
-      })
-    });
-
-    const data = await response.json();
-    const driveText = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
-
-    if (driveText && driveText.length > 50) {
-      systemPrompt = `${BASE_SYSTEM}\n\n═══════════════════════════\nLIVE DATA FRA BOX365 DRIVE\n═══════════════════════════\n\n${driveText}`;
-    }
-  } catch(err) {
-    console.warn('Drive-hentning fejlede:', err);
-  }
 }
 
 function showReadyMessage() {
@@ -385,7 +351,7 @@ async function sendMessage() {
 }
 
 // ── START ─────────────────────────────────────────────────────
-loadDriveContent().finally(showReadyMessage);
+showReadyMessage();
 </script>
 </body>
 </html>
