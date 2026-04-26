@@ -59,10 +59,6 @@
     #tipPanel iframe { width:100%; height:420px; border:none; display:block; }
 
     /* LOADING BANNER */
-    #loadingBanner { display:flex; align-items:center; gap:10px; padding:10px 20px; background:var(--accent-light); border-bottom:1px solid rgba(139,28,28,0.15); font-size:13px; color:var(--accent); flex-shrink:0; }
-    #loadingBanner.hidden { display:none; }
-    .spin { width:14px; height:14px; border:2px solid var(--accent); border-top-color:transparent; border-radius:50%; animation:spin 0.7s linear infinite; flex-shrink:0; }
-    @keyframes spin { to{transform:rotate(360deg)} }
 
     /* CHAT */
     #chat { flex:1; overflow-y:auto; padding:24px 20px; display:flex; flex-direction:column; gap:16px; scroll-behavior:smooth; }
@@ -142,10 +138,6 @@
   <iframe src="https://docs.google.com/forms/d/1NNFMwGsiYrePB-lUCjhTrGYHwnMcXPK1gaUvdofwYhk/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Indlæser formular...</iframe>
 </div>
 
-<div id="loadingBanner">
-  <div class="spin"></div>
-  <span>Henter opdateret indhold fra Box365 Drive...</span>
-</div>
 
 <div id="chat">
   <div class="msg bot">
@@ -158,7 +150,7 @@
     </div>
     <div class="welcome">
       <h2>Hej, Coach! 👊</h2>
-      <p>Jeg henter de seneste oplysninger fra Box365 Drive – et øjeblik...</p>
+      <p>Jeg er klar! Stil et spørgsmål, eller brug "Tilføj info" øverst til at bidrage til vidensbasen.</p>
     </div>
   </div>
 </div>
@@ -199,7 +191,6 @@ let history = [];
 const chat       = document.getElementById('chat');
 const input      = document.getElementById('userInput');
 const btn        = document.getElementById('sendBtn');
-const banner     = document.getElementById('loadingBanner');
 const quickReplies = document.getElementById('quickReplies');
 
 const AVATAR_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -266,7 +257,6 @@ Bekræft kort når det er gemt.`
 }
 
 function showReadyMessage() {
-  banner.classList.add('hidden');
   btn.disabled = false;
   quickReplies.style.display = 'flex';
   document.querySelector('.welcome p').textContent = 'Jeg er klar! Stil et spørgsmål, eller brug "Tilføj info" øverst til at bidrage til vidensbasen.';
